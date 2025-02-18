@@ -1,0 +1,9 @@
+{
+    "authorization": "dlp-xxxx",
+    "sandbox": {
+        "/operacoes": "sandbox_operacoes.json"
+    },
+    "endpoint": {
+        "/operacoes": "https://users.dlombelloplanilhas.com/operacoes"
+    }
+}

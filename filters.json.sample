@@ -1,0 +1,4 @@
+{
+    "rf_cash_flow":
+        "corretora in ['nubank', 'inter'] and {this_year}"
+}
