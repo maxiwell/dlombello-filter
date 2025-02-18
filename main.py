@@ -21,15 +21,17 @@ def load_config_file(config_file):
     return config
 
 def set_up(route, config, sandbox = True):
-    if sandbox == True:
-        sandbox_file = config.get("sandbox", {}).get(route, None)
 
+    # Set sandbox in config.json to avoid unnecessary API accesses
+    sandbox_file = config.get("sandbox", {}).get(route, None)
+
+    if sandbox == True:
         if os.path.exists(sandbox_file):
             with open(sandbox_file, "r") as file:
                 body = json.load(file)
             return body
         else:
-            print("sandbox file not file; run with --fetch to get data from API")
+            print("sandbox file not found; run with --fetch to get data from API")
             sys.exit(1)
 
     url = config.get("endpoint", {}).get(route, None)
@@ -39,33 +41,20 @@ def set_up(route, config, sandbox = True):
 
     headers = {
         "Content-Type": "application/json",
-        "authorization": config.get("authorization", "")
+        "Authorization": config.get("authorization", None)
     }
 
     # fetch data from API
     response = requests.get(url, headers=headers)
-    
+
     if response.status_code == 200:
         data = response.json()
-        with open(sandbox_file, "w") as file:
-            json.dump(data, file, indent=4)
-        return response.json()
+        if sandbox_file is not None:
+            with open(sandbox_file, "w+") as file:
+                json.dump(data, file, indent=4)
+        return data
     else:
         response.raise_for_status()
-
-def avaliar(transacao):
-
-    corretora = ["nubank", "inter", "picpay", "recargapay", "mercadopago", "itau"]
-    data_inicio = datetime.strptime("01/01/2025", "%d/%m/%Y").date()
-    data_fim    = datetime.strptime("01/12/2025", "%d/%m/%Y").date()
-
-    ret = []
-    if (transacao['corretora'].lower() in corretora):
-        date = datetime.strptime(transacao['date'], "%Y-%m-%d").date()
-        if (date >= data_inicio and date <= data_fim):
-            return True
-
-    return False
 
 def select_columns(all_transactions, columns):
     ret_trans = []
@@ -104,9 +93,11 @@ def run_query(data, query):
             all_transactions.append(context)
 
             totalizers['transactions'] = totalizers.get("transactions", 0) + 1
-            totalizers['qtd_atual']  = totalizers.get('qtd_atual', 0) + float(transacao['qtd_atual'])
-            totalizers['preco']  = totalizers.get('preco', 0) + float(transacao['preco'])
 
+            totalizers['qtd_total'] = totalizers.get('qtd_total', 0) + float(transacao['qtd'])
+            totalizers['qtd'] = calculate_totalizer("qtd", "ativo", context, totalizers)
+
+            totalizers['fluxo_caixa_total'] = totalizers.get('fluxo_caixa_total', 0) + float(transacao['fluxo_caixa'])
             totalizers['fluxo_caixa'] = calculate_totalizer("fluxo_caixa", "corretora", context, totalizers)
 
     all_transactions = sorted(all_transactions, key=lambda x: date_to_ts(x['date']))
@@ -186,7 +177,9 @@ def operacoes(list, filter, query, append, columns, replace, fetch, csv):
 
     print("Totalizers:")
     try:
-        totalizers["fluxo_caixa"] = {x: round(v, 2) for x,v in totalizers["fluxo_caixa"].items()}
+        totalizers["fluxo_caixa_total"] = round(totalizers["fluxo_caixa_total"], 2)
+        rounded_fluxo_caixa = {x: round(v, 2) for x,v in totalizers["fluxo_caixa"].items()}
+        totalizers["fluxo_caixa"] = dict(sorted(rounded_fluxo_caixa.items(), key=lambda x: x[0]))
     except KeyError:
         totalizers = {}
 
