@@ -185,7 +185,11 @@ def operacoes(list, filter, query, append, columns, replace, fetch, csv):
             print(i)
 
     print("Totalizers:")
-    totalizers["fluxo_caixa"] = {x: round(v, 2) for x,v in totalizers["fluxo_caixa"].items()}
+    try:
+        totalizers["fluxo_caixa"] = {x: round(v, 2) for x,v in totalizers["fluxo_caixa"].items()}
+    except KeyError:
+        totalizers = {}
+
     print(json.dumps(totalizers, indent = 4))
 
 if __name__ == '__main__':
