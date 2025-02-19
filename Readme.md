@@ -47,7 +47,7 @@ Filtra e manipula dados de proventos financeiros.
 
 #### Listar todos os filtros salvos
 
-Todos os filtros são salvos no arquivo `filters.json` e eles podem ser chamados tanto pela opção `operacoes` quanto pela opção `proventos`
+Todos os filtros são salvos no arquivo `filters.json`; eles podem ser chamados tanto por `operacoes` quanto por `proventos`.
 
 ```bash
 ./main.py operacoes --list
@@ -165,9 +165,9 @@ O arquivo config.json é usado para configurar os endpoints da API, autorizaçõ
 
 As queries são escritas em uma linguagem de consulta semelhante ao JQL do Jira. Aqui estão algumas opções de queries que você pode usar:
 
-- `ativo = 'AAPL'`: Filtra transações onde o ativo é 'AAPL'.
-- `preco > 100 OR NOT corretora ~ 'inter'`: Filtra transações onde o preço é maior que 100.
-- `date >= '01/01/2025' AND date <= '31/12/2025'`: Filtra transações dentro de um intervalo de datas.
+- `./main.py operacoes -q "ativo = 'AAPL'"`: Filtra transações onde o ativo é 'AAPL'.
+- `./main.py operacoes -q "preco > 100 OR NOT corretora ~ 'inter'"`: Filtra transações onde o preço é maior que 100.
+- `./main.py proventos -q "date >= '01/01/2025' AND date <= '31/12/2025'"`: Filtra proventos dentro de um intervalo de datas.
 
 Você pode combinar múltiplas condições usando operadores lógicos como `AND`, `OR` and trocar a prioridade de expressões usando `( )`.
 
