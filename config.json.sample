@@ -1,9 +1,23 @@
 {
-    "authorization": "dlp-xxxx",
-    "sandbox": {
-        "/operacoes": "sandbox_operacoes.json"
+    "authorization": "DLP-xxxx",
+    "operacoes": {
+        "sandbox": "sandbox_operacoes.json",
+        "endpoint": "https://users.dlombelloplanilhas.com/operacoes",
+        "columns": "date, corretora, ativo, qtd, evento, preco, qtd_atual, qtd_ant, fluxo_caixa",
+        "totalizers": [
+            {
+                "column": "qtd",
+                "group_by": "ativo"
+            },
+            {
+                "column": "fluxo_caixa",
+                "group_by": "corretora"
+            }
+        ]
     },
-    "endpoint": {
-        "/operacoes": "https://users.dlombelloplanilhas.com/operacoes"
+    "proventos": {
+        "sandbox": "sandbox_proventos.json",
+        "endpoint": "https://users.dlombelloplanilhas.com/proventos",
+        "columns": "date, corretora, ativo, evento, valor"
     }
 }

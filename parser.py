@@ -57,6 +57,11 @@ def get_context(transacao):
     return transacao
 
 def avaliar_expressao(transacao, parsed_query):
+
+    # If empty query, always true
+    if parsed_query is None:
+        return True
+
     contexto = get_context(transacao)
 
     def avaliar(parsed):

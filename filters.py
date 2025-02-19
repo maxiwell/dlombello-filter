@@ -28,6 +28,9 @@ def dt_format(dt):
     return dt.strftime("%d/%m/%Y")
 
 def magic_words(query):
+    if query is None:
+        return None
+
     today = datetime.today()
 
     first_day_this_month = today.replace(day=1)
