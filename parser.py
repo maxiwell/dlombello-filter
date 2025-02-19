@@ -19,7 +19,7 @@ def date_to_ts(date) -> int:
     raise ValueError(f"Invalid date format: {date}")
 
 def build_parse():
-    field = pp.oneOf("date ativo corretora preco qtd_atual qtd_ant fluxo_caixa evento classe")
+    field = pp.oneOf("date ativo corretora preco qtd_atual qtd_ant qtd fluxo_caixa evento classe")
 
     operator = pp.oneOf("= >= <= < > == != <> ~ in")
     not_op = pp.oneOf("NOT not !")

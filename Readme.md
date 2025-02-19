@@ -2,6 +2,16 @@
 
 Este projeto é uma ferramenta de linha de comando para filtrar e manipular dados de transações financeiras usando queries personalizadas.
 
+Exemplos de uso:
+
+```
+python main.py operacoes -q "(corretora ~ 'AVENUE' OR ativo = 'AAPL') AND qtd > 0"
+python main.py proventos -q "corretora in ['inter', 'itau'] AND {this_year}"
+python main.py operacoes -f rf_cash_flow
+python main.py operacoes -f rf_cash_flow -r "{last_year}"
+python main.py proventos -f rf_cash_flow -a "AND evento = 'DIVIDENDO'"
+```
+
 ## Instalação
 
 Clone o repositório e instale as dependências:
@@ -21,7 +31,7 @@ pip install -r requirements.txt
 Filtra e manipula dados de operações financeiras.
 
 ```bash
-./main.py operacoes [OPTIONS]
+python main.py operacoes [OPTIONS]
 ```
 
 #### `proventos`
@@ -29,7 +39,7 @@ Filtra e manipula dados de operações financeiras.
 Filtra e manipula dados de proventos financeiros.
 
 ```bash
-./main.py proventos [OPTIONS]
+python main.py proventos [OPTIONS]
 ```
 
 ### Opções
@@ -50,8 +60,8 @@ Filtra e manipula dados de proventos financeiros.
 Todos os filtros são salvos no arquivo `filters.json`; eles podem ser chamados tanto por `operacoes` quanto por `proventos`.
 
 ```bash
-./main.py operacoes --list
-./main.py proventos --list
+python main.py operacoes --list
+python main.py proventos --list
 ```
 
 Saída esperada:
@@ -70,7 +80,7 @@ trans_diff_itau:
 #### Aplicar um filtro salvo e exibir colunas específicas
 
 ```bash
-./main.py operacoes --filter operacoes_cash_flow --columns "date, ativo, preco"
+python main.py operacoes --filter operacoes_cash_flow --columns "date, ativo, preco"
 ```
 
 Saída esperada:
@@ -114,13 +124,13 @@ query: corretora in ['nubank', 'inter', 'mercadopago', 'itau'] and date >= '01/0
 #### Adicionar condições a um filtro salvo
 
 ```bash
-./main.py operacoes --filter filtro1 --append "OR preco > 100"
+python main.py operacoes --filter filtro1 --append "OR preco > 100"
 ```
 
 #### Salvar a saída em um arquivo CSV
 
 ```bash
-./main.py operacoes --filter filtro1 --csv output.csv
+python main.py operacoes --filter filtro1 --csv output.csv
 ```
 
 ## Arquivo de Configuração
@@ -129,8 +139,8 @@ O arquivo config.json é usado para configurar os endpoints da API, autorizaçõ
 
 ```json
 {
-    "authorization": "DLP-xxxx",
     "operacoes": {
+        "authorization": "DLP-xxxx",
         "sandbox": "sandbox_operacoes.json",
         "endpoint": "https://users.dlombelloplanilhas.com/operacoes",
         "columns": "date, corretora, ativo, qtd, evento, preco, qtd_atual, qtd_ant, fluxo_caixa",
@@ -146,6 +156,7 @@ O arquivo config.json é usado para configurar os endpoints da API, autorizaçõ
         ]
     },
     "proventos": {
+        "authorization": "DLP-xxxx",
         "sandbox": "sandbox_proventos.json",
         "endpoint": "https://users.dlombelloplanilhas.com/proventos",
         "columns": "date, corretora, ativo, evento, valor"
@@ -155,19 +166,19 @@ O arquivo config.json é usado para configurar os endpoints da API, autorizaçõ
 
 ### Detalhamento das Opções de Configuração
 
-- `endpoint`: URL do endpoint da API.
 - `authorization`: Chave de autorização para acessar a API.
 - `sandbox`: Arquivo de sandbox para armazenar dados localmente.
-- `columns`: Colunas padrão a serem exibidas na saída. A opção --column sobreescreve esse valor.
-- `totalizers`: Configurações para calcular totalizadores caso queira. A opção `group_by` é opção.
+- `endpoint`: URL do endpoint da API.
+- `columns`: Colunas padrão a serem exibidas na saída; a opção `--column` sobreescreve esse valor.
+- `totalizers`: Configurações opcional para calcular totalizadores; a chave `group_by` é opcional.
 
 ## Opções de Queries
 
 As queries são escritas em uma linguagem de consulta semelhante ao JQL do Jira. Aqui estão algumas opções de queries que você pode usar:
 
-- `./main.py operacoes -q "ativo = 'AAPL'"`: Filtra transações onde o ativo é 'AAPL'.
-- `./main.py operacoes -q "preco > 100 OR NOT corretora ~ 'inter'"`: Filtra transações onde o preço é maior que 100.
-- `./main.py proventos -q "date >= '01/01/2025' AND date <= '31/12/2025'"`: Filtra proventos dentro de um intervalo de datas.
+- `python main.py operacoes -q "ativo = 'AAPL'"`: Filtra transações onde o ativo é 'AAPL'.
+- `python main.py operacoes -q "preco > 100 OR NOT corretora ~ 'inter'"`: Filtra transações onde o preço é maior que 100.
+- `python main.py proventos -q "date >= '01/01/2025' AND date <= '31/12/2025'"`: Filtra proventos dentro de um intervalo de datas.
 
 Você pode combinar múltiplas condições usando operadores lógicos como `AND`, `OR` and trocar a prioridade de expressões usando `( )`.
 

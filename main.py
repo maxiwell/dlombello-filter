@@ -4,6 +4,7 @@
 import click
 import json
 import sys
+import re
 
 from filters import get_query_filter
 from command import command

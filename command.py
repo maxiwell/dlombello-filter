@@ -22,7 +22,7 @@ def set_up(config, sandbox = True):
             print("sandbox file not found; run with --fetch to get data from API")
             sys.exit(1)
 
-    url = config.get("endpoint", {}).get(route, None)
+    url = config.get("endpoint", None)
     if url is None:
         print("endpoint not found")
         sys.exit(1)
@@ -126,8 +126,9 @@ def command(config, sandbox, list, filter, query, append, columns, replace, fetc
 
     print("Totalizers:")
     for totalizer_item in totalizers_config:
-       column = totalizer_item.get('column', None)
-       rounded = {x: round(v, 2) for x,v in totalizers[column].items()}
-       totalizers[column] = dict(sorted(rounded.items(), key=lambda x: x[0]))
+        column = totalizer_item.get('column', None)
+        if column in totalizers:
+            rounded = {x: round(v, 2) for x,v in totalizers[column].items()}
+            totalizers[column] = dict(sorted(rounded.items(), key=lambda x: x[0]))
 
     print(json.dumps(totalizers, indent = 4))
