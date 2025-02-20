@@ -3,6 +3,7 @@ import os
 import sys
 import requests
 import click
+import csv
 from datetime import datetime
 from parser import get_context, parse_string, avaliar_expressao, date_to_ts
 from filters import magic_words
@@ -101,6 +102,16 @@ def run_query(data, query, totalizers_config):
     all_transactions = sorted(all_transactions, key=lambda x: date_to_ts(x['date']))
     return all_transactions, totalizers
 
+def convert_to_csv(dados, arquivo_csv):
+    if dados is None or len(dados) == 0:
+        print("Nenhum dado para ser escrito no arquivo CSV!")
+        return
+
+    with open(arquivo_csv, mode='w', newline='', encoding='utf-8') as arquivo:
+        escritor_csv = csv.DictWriter(arquivo, fieldnames=dados[0].keys())
+        escritor_csv.writeheader()
+        escritor_csv.writerows(dados)
+
 def command(config, sandbox, list, filter, query, append, columns, replace, fetch, csv):
 
     query = magic_words(query)
@@ -116,7 +127,6 @@ def command(config, sandbox, list, filter, query, append, columns, replace, fetc
     trans, totalizers = run_query(data, query, totalizers_config)
 
     trans = select_columns(trans, columns)
-    trans = sorted(trans, key=lambda x: date_to_ts(x['date']))
 
     if csv is not None:
         convert_to_csv(trans, csv)

@@ -17,7 +17,7 @@ python main.py proventos -f rf_cash_flow -a "AND evento = 'DIVIDENDO'"
 Clone o repositório e instale as dependências:
 
 ```bash
-git clone https://github.com/seu-usuario/dlombello-filter.git
+git clone https://github.com/maxiwell/dlombello-filter.git
 cd dlombello-filter
 pip install -r requirements.txt
 ```
@@ -170,7 +170,7 @@ O arquivo config.json é usado para configurar os endpoints da API, autorizaçõ
 - `sandbox`: Arquivo de sandbox para armazenar dados localmente.
 - `endpoint`: URL do endpoint da API.
 - `columns`: Colunas padrão a serem exibidas na saída; a opção `--column` sobreescreve esse valor.
-- `totalizers`: Configurações opcional para calcular totalizadores; a chave `group_by` é opcional.
+- `totalizers`: Chave opcional para calcular totalizadores; a subchave `group_by` também é opcional.
 
 ## Opções de Queries
 
