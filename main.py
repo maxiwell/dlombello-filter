@@ -90,8 +90,14 @@ def operacoes(list, filter, query, append, columns, replace, fetch, csv):
 def proventos(list, filter, query, append, columns, replace, fetch, csv):
     call_command("proventos", list, filter, query, append, columns, replace, fetch, csv)
 
+@click.command()
+@common_options
+def carteira(list, filter, query, append, columns, replace, fetch, csv):
+    call_command("carteira", list, filter, query, append, columns, replace, fetch, csv)
+
 cli.add_command(operacoes)
 cli.add_command(proventos)
+cli.add_command(carteira)
 
 if __name__ == '__main__':
     if (len(sys.argv) < 2):

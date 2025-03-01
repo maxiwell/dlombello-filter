@@ -19,6 +19,33 @@
         "authorization": "DLP-xxxx",
         "sandbox": "sandbox_proventos.json",
         "endpoint": "https://users.dlombelloplanilhas.com/proventos",
-        "columns": "date, corretora, ativo, evento, valor"
+        "columns": "date, corretora, ativo, classe, evento, valor, vlr_liquido",
+        "totalizers": [
+            {
+                "column": "valor",
+                "group_by": "corretora"
+            },
+            {
+                "column": "vlr_liquido",
+                "group_by": "classe"
+            }
+        ]
+    },
+    "carteira": {
+        "authorization": "DLP-xxxx",
+        "sandbox": "sandbox_carteira.json",
+        "endpoint": "https://users.dlombelloplanilhas.com/carteira",
+        "columns": "ativo, qtd, corretora, classe, vlr_investido, pm, price",
+        "totalizers": [
+            {
+                "column": "vlr_investido",
+                "group_by": "classe"
+            },
+            {
+                "column": "[qtd * price]",
+                "group_by": "classe",
+                "alias": "valor_mercado"
+            }
+        ]
     }
 }
